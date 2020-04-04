@@ -7,11 +7,12 @@ func main() {
 	frame := Frame{}
 	for x := 0; x < HEIGHT; x++ {
 		for y := 0; y < WIDTH; y++ {
-			frame[HEIGHT-1-x][y] = Pixel{
-				r: 255 * y / WIDTH,
-				g: 255 * x / HEIGHT,
-				b: 255 * 0.2,
+			color := Color{
+				float64(y) / float64(WIDTH),
+				float64(x) / float64(HEIGHT),
+				0.2,
 			}
+			frame[HEIGHT-1-x][y] = color.ToPixel()
 		}
 	}
 	frame.Save("img.ppm")
