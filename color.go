@@ -18,8 +18,9 @@ func LinearBlend(color1 Color, color2 Color, param float64) Color {
 
 func RayColor(ray Ray, hitable Hitable) Color {
 	hit := hitable.Hit(ray)
-	if hit.time > 0 {
-		return Color{1.0, 0.0, 0.0}
+	if hit.time > 0.0 {
+		vec := AddVec3D(hit.normal, Vec3D{1.0, 1.0, 1.0})
+		return LinearBlend(Color{vec.x, vec.y, vec.z}, Color{0.0, 0.0, 0.0}, 0.5)
 	}
 	param := 0.5 * (ray.direction.Unit().y + 1)
 	return LinearBlend(Color{0.5, 0.7, 1.0}, Color{1.0, 1.0, 1.0}, param)

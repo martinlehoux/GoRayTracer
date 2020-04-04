@@ -19,7 +19,7 @@ type Sphere struct {
 }
 
 func (sphere Sphere) Normal(point Vec3D) Vec3D {
-	return (SubVec3D(point, sphere.center)).Unit()
+	return SubVec3D(point, sphere.center).Unit()
 }
 
 func (sphere Sphere) Hit(ray Ray) HitRecord {
@@ -31,7 +31,7 @@ func (sphere Sphere) Hit(ray Ray) HitRecord {
 	if discriminant < 0 {
 		return HitRecord{}
 	}
-	time := (-b - math.Sqrt(discriminant)) / 2.0 / a
+	time := (-b - math.Sqrt(discriminant)) / (2.0 * a)
 	point := ray.PointAt(time)
-	return HitRecord{time, point, SubVec3D(point, sphere.Normal(point))}
+	return HitRecord{time, point, sphere.Normal(point)}
 }
