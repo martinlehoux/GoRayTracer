@@ -16,7 +16,10 @@ func LinearBlend(color1 Color, color2 Color, param float64) Color {
 	}
 }
 
-func RayColor(ray Ray) Color {
+func RayColor(ray Ray, hitable Hitable) Color {
+	if hitable.Hit(ray) {
+		return Color{1.0, 0.0, 0.0}
+	}
 	param := 0.5 * (ray.direction.Unit().y + 1)
 	return LinearBlend(Color{0.5, 0.7, 1.0}, Color{1.0, 1.0, 1.0}, param)
 }
