@@ -25,6 +25,10 @@ func (vec Vec3D) Unit() Vec3D {
 	return ScalarProduct(1.0/length, vec)
 }
 
+func (vec Vec3D) Reflect(normal Vec3D) Vec3D {
+	return SubVec3D(vec, ScalarProduct(2*DotProduct(vec, normal), normal))
+}
+
 func AddVec3D(vec1 Vec3D, vec2 Vec3D) Vec3D {
 	return Vec3D{vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z}
 }

@@ -1,3 +1,4 @@
+// TODO Use pointers when needed to reduce memory
 package main
 
 import (
@@ -22,11 +23,15 @@ func main() {
 
 	MAT_RED := Lambertian{Color{0.7, 0.3, 0.3}}
 	MAT_GREEN := Lambertian{Color{0.8, 0.8, 0.0}}
+	METAL_GREY := Metal{Color{0.8, 0.8, 0.8}, 0.3}
+	METAL_BROWN := Metal{Color{0.8, 0.6, 0.2}, 1.0}
 
-	SPHERE := Sphere{Vec3D{0.0, 0.0, -1.0}, 0.5, MAT_RED}
-	EARTH := Sphere{Vec3D{0.0, -100.5, -1.0}, 100.0, MAT_GREEN}
-
-	WORLD := HitableList{EARTH, SPHERE}
+	WORLD := HitableList{
+		Sphere{Vec3D{0.0, 0.0, -1.0}, 0.5, MAT_RED},
+		Sphere{Vec3D{-1.0, 0.0, -1.0}, 0.5, METAL_GREY},
+		Sphere{Vec3D{1.0, 0.0, -1.0}, 0.5, METAL_BROWN},
+		Sphere{Vec3D{0.0, -100.5, -1.0}, 100.0, MAT_GREEN},
+	}
 	frame := Frame{}
 	bar := progressbar.New(HEIGHT)
 	for x := 0; x < HEIGHT; x++ {

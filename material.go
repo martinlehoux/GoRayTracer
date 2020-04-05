@@ -14,3 +14,14 @@ func (lambertian Lambertian) Scatter(ray Ray, hit HitRecord) (Ray, Color) {
 	scattered := Ray{hit.point, direction}
 	return scattered, lambertian.albedo
 }
+
+type Metal struct {
+	albedo Color
+	fuzz   float64
+}
+
+func (metal Metal) Scatter(ray Ray, hit HitRecord) (Ray, Color) {
+	reflected := AddVec3D(ray.direction.Unit().Reflect(hit.normal), ScalarProduct(metal.fuzz, RandomInUnitSphere()))
+	scattered := Ray{hit.point, reflected}
+	return scattered, metal.albedo
+}
