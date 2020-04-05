@@ -11,6 +11,7 @@ const WIDTH = 200
 const T_MIN = 0.001
 const T_MAX = 1000
 const RAY_PER_PIXEL = 100
+const MAX_DEPTH = 50
 
 func main() {
 	LOWER_LEFT_CORNER := Vec3D{-2.0, -1.0, -1.0}
@@ -32,7 +33,7 @@ func main() {
 				u := (float64(y) + rand.Float64()) / float64(WIDTH)
 				v := (float64(x) + rand.Float64()) / float64(HEIGHT)
 				ray := CAMERA.GetRay(u, v)
-				color_list[it] = RayColor(ray, WORLD)
+				color_list[it] = RayColor(ray, WORLD, 0)
 			}
 			color := ColorMeanSquare(color_list)
 			frame[HEIGHT-1-x][y] = color.ToPixel()

@@ -18,11 +18,23 @@ func LinearBlend(color1 Color, color2 Color, param float64) Color {
 	}
 }
 
-func RayColor(ray Ray, hitable_list HitableList) Color {
+func AttenuateColor(attenuation Color, color Color) Color {
+	return Color{
+		attenuation.r * color.r,
+		attenuation.g * color.g,
+		attenuation.b * color.b,
+	}
+}
+
+func RayColor(ray Ray, hitable_list HitableList, depth int) Color {
+	if depth > MAX_DEPTH {
+		return Color{0.0, 0.0, 0.0}
+	}
 	hit := hitable_list.Hit(ray, T_MIN, T_MAX)
 	if hit.time > 0.0 {
-		vec := AddVec3D(hit.normal, Vec3D{1.0, 1.0, 1.0})
-		return LinearBlend(Color{vec.x, vec.y, vec.z}, Color{0.0, 0.0, 0.0}, 0.5)
+		direction := AddVec3D(hit.normal, RandomInUnitSphere())
+		scattered := Ray{hit.point, direction}
+		return AttenuateColor(Color{0.5, 0.5, 0.5}, RayColor(scattered, hitable_list, depth+1))
 	}
 	param := 0.5 * (ray.direction.Unit().y + 1)
 	return LinearBlend(Color{0.5, 0.7, 1.0}, Color{1.0, 1.0, 1.0}, param)
