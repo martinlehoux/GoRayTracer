@@ -1,6 +1,9 @@
 package main
 
-import "math"
+import (
+	"math"
+	"math/rand"
+)
 
 type Vec3D struct {
 	x, y, z float64
@@ -43,5 +46,14 @@ func CrossProduct(vec1 Vec3D, vec2 Vec3D) Vec3D {
 		vec1.y*vec2.z - vec1.z*vec2.y,
 		vec1.z*vec2.x - vec1.x*vec2.z,
 		vec1.x*vec2.y - vec1.y*vec2.x,
+	}
+}
+
+func RandomInUnitSphere() Vec3D {
+	for {
+		point := Vec3D{2*rand.Float64() - 1, 2*rand.Float64() - 1, 2*rand.Float64() - 1}
+		if point.Length() < 1.0 {
+			return point
+		}
 	}
 }
