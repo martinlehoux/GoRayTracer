@@ -32,10 +32,8 @@ func RayColor(ray Ray, hitable_list HitableList, depth int) Color {
 	}
 	hit := hitable_list.Hit(ray, T_MIN, T_MAX)
 	if hit.time > 0.0 {
-		// TODO: Use the correct distribution
-		direction := AddVec3D(hit.normal, RandomInUnitSphere())
-		scattered := Ray{hit.point, direction}
-		return AttenuateColor(Color{0.5, 0.5, 0.5}, RayColor(scattered, hitable_list, depth+1))
+		scattered, attenuation := hit.material.Scatter(ray, hit)
+		return AttenuateColor(attenuation, RayColor(scattered, hitable_list, depth+1))
 	}
 	param := 0.5 * (ray.direction.Unit().y + 1)
 	return LinearBlend(Color{0.5, 0.7, 1.0}, Color{1.0, 1.0, 1.0}, param)

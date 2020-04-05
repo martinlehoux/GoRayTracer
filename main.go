@@ -20,8 +20,11 @@ func main() {
 	VERTICAL := Vec3D{0.0, 2.0, 0.0}
 	CAMERA := Camera{LOWER_LEFT_CORNER, ORIGIN, HORIZONTAL, VERTICAL}
 
-	SPHERE := Sphere{Vec3D{0.0, 0.0, -1.0}, 0.5}
-	EARTH := Sphere{Vec3D{0.0, -100.5, -1.0}, 100.0}
+	MAT_RED := Lambertian{Color{0.7, 0.3, 0.3}}
+	MAT_GREEN := Lambertian{Color{0.8, 0.8, 0.0}}
+
+	SPHERE := Sphere{Vec3D{0.0, 0.0, -1.0}, 0.5, MAT_RED}
+	EARTH := Sphere{Vec3D{0.0, -100.5, -1.0}, 100.0, MAT_GREEN}
 
 	WORLD := HitableList{EARTH, SPHERE}
 	frame := Frame{}

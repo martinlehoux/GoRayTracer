@@ -3,9 +3,10 @@ package main
 import "math"
 
 type HitRecord struct {
-	time   float64
-	point  Vec3D
-	normal Vec3D
+	time     float64
+	point    Vec3D
+	normal   Vec3D
+	material Material
 }
 
 type Hitable interface {
@@ -16,7 +17,7 @@ type Hitable interface {
 type HitableList []Hitable
 
 func (hitable_list HitableList) Hit(ray Ray, t_min float64, t_max float64) HitRecord {
-	closest_hit := HitRecord{T_MAX, Vec3D{}, Vec3D{}}
+	closest_hit := HitRecord{T_MAX, Vec3D{}, Vec3D{}, nil}
 	for _, hitable := range hitable_list {
 		hit := hitable.Hit(ray, t_min, closest_hit.time)
 		if hit.time > 0 {
@@ -31,8 +32,9 @@ func (hitable_list HitableList) Hit(ray Ray, t_min float64, t_max float64) HitRe
 }
 
 type Sphere struct {
-	center Vec3D
-	radius float64
+	center   Vec3D
+	radius   float64
+	material Material
 }
 
 func (sphere Sphere) Normal(point Vec3D, ray Ray) Vec3D {
@@ -55,12 +57,12 @@ func (sphere Sphere) Hit(ray Ray, t_min float64, t_max float64) HitRecord {
 		time := (-b - root) / (2.0 * a)
 		if t_min < time && time < t_max {
 			point := ray.PointAt(time)
-			return HitRecord{time, point, sphere.Normal(point, ray)}
+			return HitRecord{time, point, sphere.Normal(point, ray), sphere.material}
 		}
 		time = (-b + root) / (2.0 * a)
 		if t_min < time && time < t_max {
 			point := ray.PointAt(time)
-			return HitRecord{time, point, sphere.Normal(point, ray)}
+			return HitRecord{time, point, sphere.Normal(point, ray), sphere.material}
 		}
 	}
 	return HitRecord{}
