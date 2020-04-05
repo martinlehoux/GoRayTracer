@@ -1,5 +1,7 @@
 package main
 
+import "math"
+
 type Color struct {
 	r, g, b float64
 }
@@ -24,4 +26,26 @@ func RayColor(ray Ray, hitable_list HitableList) Color {
 	}
 	param := 0.5 * (ray.direction.Unit().y + 1)
 	return LinearBlend(Color{0.5, 0.7, 1.0}, Color{1.0, 1.0, 1.0}, param)
+}
+
+func ColorMean(color_list [RAY_PER_PIXEL]Color) Color {
+	length := float64(len(color_list))
+	mean_color := Color{}
+	for _, color := range color_list {
+		mean_color.r += color.r
+		mean_color.g += color.g
+		mean_color.b += color.b
+	}
+	mean_color.r /= length
+	mean_color.g /= length
+	mean_color.b /= length
+	return mean_color
+}
+
+func ColorMeanSquare(color_list [RAY_PER_PIXEL]Color) Color {
+	mean_color := ColorMean(color_list)
+	mean_color.r = math.Sqrt(mean_color.r)
+	mean_color.g = math.Sqrt(mean_color.g)
+	mean_color.b = math.Sqrt(mean_color.b)
+	return mean_color
 }
