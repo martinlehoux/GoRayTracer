@@ -16,8 +16,8 @@ func LinearBlend(color1 Color, color2 Color, param float64) Color {
 	}
 }
 
-func RayColor(ray Ray, hitable Hitable) Color {
-	hit := hitable.Hit(ray)
+func RayColor(ray Ray, hitable_list HitableList) Color {
+	hit := hitable_list.Hit(ray, T_MIN, T_MAX)
 	if hit.time > 0.0 {
 		vec := AddVec3D(hit.normal, Vec3D{1.0, 1.0, 1.0})
 		return LinearBlend(Color{vec.x, vec.y, vec.z}, Color{0.0, 0.0, 0.0}, 0.5)
