@@ -1,6 +1,10 @@
 package main
 
-import "math/rand"
+import (
+	"math/rand"
+
+	"github.com/schollz/progressbar"
+)
 
 const HEIGHT = 100
 const WIDTH = 200
@@ -20,6 +24,7 @@ func main() {
 
 	WORLD := HitableList{EARTH, SPHERE}
 	frame := Frame{}
+	bar := progressbar.New(HEIGHT)
 	for x := 0; x < HEIGHT; x++ {
 		for y := 0; y < WIDTH; y++ {
 			var color_list [RAY_PER_PIXEL]Color
@@ -32,6 +37,7 @@ func main() {
 			color := ColorMeanSquare(color_list)
 			frame[HEIGHT-1-x][y] = color.ToPixel()
 		}
+		bar.Add(1)
 	}
 	frame.Save("img.ppm")
 }
