@@ -2,6 +2,7 @@ package main
 
 import "math"
 
+// HitRecord contains data of a ray hiting a hitable
 type HitRecord struct {
 	time     float64
 	point    Vec3D
@@ -9,44 +10,44 @@ type HitRecord struct {
 	material Material
 }
 
+// Hitable is a physical volume a Ray can hit
 type Hitable interface {
-	Hit(ray Ray, t_min float64, t_max float64) HitRecord
+	Hit(ray Ray, tmin float64, tmax float64) HitRecord
 	Normal(point Vec3D, ray Ray) Vec3D
 }
 
+// HitableList ...
 type HitableList []Hitable
 
-func (hitable_list HitableList) Hit(ray Ray, t_min float64, t_max float64) HitRecord {
-	closest_hit := HitRecord{T_MAX, Vec3D{}, Vec3D{}, nil}
-	for _, hitable := range hitable_list {
-		hit := hitable.Hit(ray, t_min, closest_hit.time)
+// Hit finds the closest hit of all hitables
+func (hitableList HitableList) Hit(ray Ray, tmin float64, tmax float64) HitRecord {
+	closestHit := HitRecord{TMax, Vec3D{}, Vec3D{}, nil}
+	for _, hitable := range hitableList {
+		hit := hitable.Hit(ray, tmin, closestHit.time)
 		if hit.time > 0 {
-			closest_hit = hit
+			closestHit = hit
 		}
 	}
-	if closest_hit.time < T_MAX {
-		return closest_hit
-	} else {
-		return HitRecord{}
+	if closestHit.time < TMax {
+		return closestHit
 	}
+	return HitRecord{}
 }
 
+// Sphere ...
 type Sphere struct {
 	center   Vec3D
 	radius   float64
 	material Material
 }
 
+// Normal ...
 func (sphere Sphere) Normal(point Vec3D, ray Ray) Vec3D {
-	out_normal := SubVec3D(point, sphere.center).Unit()
-	if DotProduct(ray.direction, out_normal) < 0.0 {
-		return out_normal
-	} else {
-		return out_normal.Invert()
-	}
+	return SubVec3D(point, sphere.center).Unit()
 }
 
-func (sphere Sphere) Hit(ray Ray, t_min float64, t_max float64) HitRecord {
+// Hit ...
+func (sphere Sphere) Hit(ray Ray, tmin float64, tmax float64) HitRecord {
 	oc := SubVec3D(ray.origin, sphere.center)
 	a := DotProduct(ray.direction, ray.direction)
 	b := 2.0 * DotProduct(oc, ray.direction)
@@ -55,12 +56,12 @@ func (sphere Sphere) Hit(ray Ray, t_min float64, t_max float64) HitRecord {
 	if discriminant > 0 {
 		root := math.Sqrt(discriminant)
 		time := (-b - root) / (2.0 * a)
-		if t_min < time && time < t_max {
+		if tmin < time && time < tmax {
 			point := ray.PointAt(time)
 			return HitRecord{time, point, sphere.Normal(point, ray), sphere.material}
 		}
 		time = (-b + root) / (2.0 * a)
-		if t_min < time && time < t_max {
+		if tmin < time && time < tmax {
 			point := ray.PointAt(time)
 			return HitRecord{time, point, sphere.Normal(point, ray), sphere.material}
 		}

@@ -29,6 +29,13 @@ func (vec Vec3D) Reflect(normal Vec3D) Vec3D {
 	return SubVec3D(vec, ScalarProduct(2*DotProduct(vec, normal), normal))
 }
 
+func Refract(vecI Vec3D, normal Vec3D, etaI float64, etaT float64) Vec3D {
+	cosTheta := FMin(DotProduct(vecI.Invert(), normal), 1.0)
+	vecTPar := ScalarProduct(etaI/etaT, AddVec3D(vecI, ScalarProduct(cosTheta, normal)))
+	vecTPer := ScalarProduct(-math.Sqrt(1.0-DotProduct(vecTPar, vecTPar)), normal)
+	return AddVec3D(vecTPar, vecTPer)
+}
+
 func AddVec3D(vec1 Vec3D, vec2 Vec3D) Vec3D {
 	return Vec3D{vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z}
 }
