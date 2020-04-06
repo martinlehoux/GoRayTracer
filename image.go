@@ -1,7 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"image"
+	"image/color"
+	"image/png"
 	"os"
 )
 
@@ -15,15 +17,15 @@ type Frame [Height][Width]Pixel
 
 // Save saves frame to PPM file
 func (frame Frame) Save(filename string) {
-	f, err := os.Create(filename)
-	if err != nil {
-		panic(nil)
-	}
-	defer f.Close()
-	f.WriteString(fmt.Sprintf("P3\n%d %d\n255\n", Width, Height))
-	for _, row := range frame {
-		for _, pixel := range row {
-			f.WriteString(fmt.Sprintf("%d %d %d ", pixel.r, pixel.g, pixel.b))
+	upLeft, bottomRight := image.Point{0, 0}, image.Point{Width, Height}
+	image := image.NewRGBA(image.Rectangle{upLeft, bottomRight})
+	for x, row := range frame {
+		for y, pixel := range row {
+			color := color.RGBA{uint8(pixel.r), uint8(pixel.g), uint8(pixel.b), 0xff}
+			image.Set(y, x, color)
 		}
 	}
+	f, _ := os.Create(filename)
+	defer f.Close()
+	png.Encode(f, image)
 }

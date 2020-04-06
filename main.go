@@ -68,7 +68,7 @@ func main() {
 		}
 		bar.Add(1)
 	}
-	frame.Save("img.ppm")
+	frame.Save("img.png")
 	// frame.Save(fmt.Sprintf("frames/frame_%06d.ppm", k))
 }
 
