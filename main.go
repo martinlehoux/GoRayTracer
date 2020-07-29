@@ -2,7 +2,6 @@
 package main
 
 import (
-	"math"
 	"math/rand"
 
 	"github.com/schollz/progressbar"
@@ -27,28 +26,29 @@ const (
 
 func main() {
 	// Scene
-	camera := NewCamera(90.0, float64(Width)/float64(Height))
+	vup := Vec3D{0.0, 1.0, 0.0}
+	camera := NewCamera(Vec3D{-2.0, 2.0, 1.0}, Vec3D{0.0, 0.0, -1.0}, vup, 90.0, float64(Width)/float64(Height))
 
-	r := math.Cos(math.Pi / 4)
-	blue := Lambertian{Color{0.0, 0.0, 1.0}}
-	red := Lambertian{Color{1.0, 0.0, 0.0}}
-	World := HitableList{
-		Sphere{Vec3D{-r, 0.0, -1.0}, r, blue},
-		Sphere{Vec3D{r, 0.0, -1.0}, r, red},
-	}
-
-	// matRed := Lambertian{Color{0.7, 0.3, 0.3}}
-	// matGreen := Lambertian{Color{0.8, 0.8, 0.0}}
-	// metalGrey := Metal{Color{0.8, 0.8, 0.8}, 0.3}
-	// metalBrown := Metal{Color{0.8, 0.6, 0.2}, 1.0}
-	// glass := Dielectric{1.5}
-
+	// r := math.Cos(math.Pi / 4)
+	// blue := Lambertian{Color{0.0, 0.0, 1.0}}
+	// red := Lambertian{Color{1.0, 0.0, 0.0}}
 	// World := HitableList{
-	// 	Sphere{Vec3D{0.0, 0.0, -1.0}, 0.5, glass},
-	// 	Sphere{Vec3D{-1.0, 0.0, -1.0}, 0.5, metalGrey},
-	// 	Sphere{Vec3D{1.0, 0.0, -1.0}, 0.5, matRed},
-	// 	Sphere{Vec3D{0.0, -100.5, -1.0}, 100.0, matGreen},
+	// 	Sphere{Vec3D{-r, 0.0, -1.0}, r, blue},
+	// 	Sphere{Vec3D{r, 0.0, -1.0}, r, red},
 	// }
+
+	matRed := Lambertian{Color{0.7, 0.3, 0.3}}
+	matGreen := Lambertian{Color{0.8, 0.8, 0.0}}
+	metalGrey := Metal{Color{0.8, 0.8, 0.8}, 0.3}
+	// metalBrown := Metal{Color{0.8, 0.6, 0.2}, 1.0}
+	glass := Dielectric{1.5}
+
+	World := HitableList{
+		Sphere{Vec3D{0.0, 0.0, -1.0}, 0.5, glass},
+		Sphere{Vec3D{-1.0, 0.0, -1.0}, 0.5, metalGrey},
+		Sphere{Vec3D{1.0, 0.0, -1.0}, 0.5, matRed},
+		Sphere{Vec3D{0.0, -100.5, -1.0}, 100.0, matGreen},
+	}
 
 	// Program
 	// start := AddVec3D(Origin, Vec3D{-1.0, 0.0, 0.0})

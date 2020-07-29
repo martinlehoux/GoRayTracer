@@ -1,0 +1,1 @@
+ffmpeg -framerate 60 -i "frames/frame_%06d.ppm" -c:v libx264 -c:a aac movie.mp4
